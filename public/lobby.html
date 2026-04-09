@@ -360,10 +360,16 @@ function windowMessage(event)
 function start_game(active,id1,id2)
 {
 	console.log('[lobby] start_game called, host=', host, 'active=', active, 'id1=', id1, 'id2=', id2)
-	if( host)
-		host.source.postMessage({event:'start',role:active?'active':'passive',id1:id1,id2:id2},host.origin);
-	else
-		console.warn('[lobby] start_game: host is null, postMessage not sent')
+	var payload = {event:'start',role:active?'active':'passive',id1:id1,id2:id2}
+	if( host) {
+		host.source.postMessage(payload, host.origin)
+	} else if( window.self !== window.top) {
+		// postMessage init never arrived — send to parent with wildcard origin
+		console.log('[lobby] host not set, falling back to window.parent postMessage')
+		window.parent.postMessage(payload, '*')
+	} else {
+		console.warn('[lobby] start_game: not in iframe and host is null')
+	}
 }
 </script>
 
