@@ -341,6 +341,7 @@ $(window).bind('hashchange', function(){
 window.addEventListener('message', windowMessage, false);
 function windowMessage(event)
 {
+	console.log('[lobby] message received from', event.origin, event.data)
 	if( window.self !== window.top) //in iframe
 	{
 		var data = event.data;
@@ -352,13 +353,17 @@ function windowMessage(event)
 				source:event.source
 			};
 			room = data.room;
+			console.log('[lobby] host set, origin=', host.origin, 'room=', room)
 		}
 	}
 }
 function start_game(active,id1,id2)
 {
+	console.log('[lobby] start_game called, host=', host, 'active=', active, 'id1=', id1, 'id2=', id2)
 	if( host)
 		host.source.postMessage({event:'start',role:active?'active':'passive',id1:id1,id2:id2},host.origin);
+	else
+		console.warn('[lobby] start_game: host is null, postMessage not sent')
 }
 </script>
 
