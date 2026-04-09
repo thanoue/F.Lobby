@@ -185,7 +185,7 @@ $('.lodge .login form').submit(function(e){
 		data: JSON.stringify({
 			name:name,
 			room:room,
-			origin:host.origin
+			origin: host ? host.origin : location.origin
 		}),
 		success: logged_in
 	});
