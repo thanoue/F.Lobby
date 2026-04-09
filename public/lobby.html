@@ -160,7 +160,7 @@ body
 
 var ws, //webSocket
 	name,
-	room,
+	room = (new URLSearchParams(location.search)).get('room') || null,
 	host,
 	selected,
 	selected_id,
